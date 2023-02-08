@@ -7,8 +7,8 @@ const App = () => {
   const canvasWidth = 1000
   const canvasHeight = 600
 
-  const startX = 50
-  const startY = 50
+  const startX = canvasWidth / 2
+  const startY = canvasHeight / 2
 
   const pieceWidth = 20
   const pieceHeight = 20

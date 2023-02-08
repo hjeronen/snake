@@ -1,18 +1,42 @@
-import { useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 
-const GameBoard = (props) => {
+const GameBoard = ({ draw, x, y, width, height, pieceWidth, pieceHeight }) => {
 
-    const { draw, x, y, width, height, pieceWidth, pieceHeight } = props
     const canvasRef = useRef(null)
+    const [piece, setPiece] = useState({ positionX: x, positionY: y })
+
 
     useEffect(() => {
 
         const context = canvasRef.current.getContext('2d')
+        const newPiece = {...piece}
 
-        draw(context, x, y, pieceWidth, pieceHeight)
+        let animationFrameId
 
-    }, [draw, x, y, pieceWidth, pieceHeight])
+        const render = () => {
+
+            newPiece.positionX++
+
+            if (newPiece.positionX > width) {
+                newPiece.positionX = 0
+            }
+
+            draw(context, newPiece.positionX, newPiece.positionY, pieceWidth, pieceHeight)
+
+            animationFrameId = window.requestAnimationFrame(render)
+
+        }
+
+        render()
+
+        return () => {
+
+            window.cancelAnimationFrame(animationFrameId);
+
+        }
+
+    }, [draw, piece, width, pieceWidth, pieceHeight])
 
     return (
         <canvas
