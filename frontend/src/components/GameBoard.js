@@ -1,28 +1,92 @@
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { store } from './Store'
+import { keyListener } from './KeyListener'
 
 
-const GameBoard = ({ draw, x, y, width, height, pieceWidth, pieceHeight }) => {
+const GameBoard = ({ draw, width, height, pieceWidth }) => {
 
     const canvasRef = useRef(null)
-    const [piece, setPiece] = useState({ positionX: x, positionY: y })
 
+    useEffect(() => {
+
+        window.addEventListener('keydown', keyListener)
+
+        return () => {
+            window.removeEventListener('keydown', keyListener)
+        }
+    })
 
     useEffect(() => {
 
         const context = canvasRef.current.getContext('2d')
-        const newPiece = {...piece}
 
         let animationFrameId
 
         const render = () => {
 
-            newPiece.positionX++
-
-            if (newPiece.positionX > width) {
-                newPiece.positionX = 0
+            const state = store.getState()
+            switch (state.direction) {
+                default:
+                    state.x++
+                    break
+                case 'UP':
+                    state.y--
+                    break
+                case 'DOWN':
+                    state.y++
+                    break
+                case 'LEFT':
+                    state.x--
+                    break
+                case 'RIGHT':
+                    state.x++
             }
 
-            draw(context, newPiece.positionX, newPiece.positionY, pieceWidth, pieceHeight)
+            if (state.x > width) {
+                state.x = 0
+                store.dispatch({
+                    type: 'SET',
+                    payload: {
+                        direction: state.direction,
+                        x: 0,
+                        y: state.y
+                    }
+                })
+            } else if (state.x < 0) {
+                state.x = width
+                store.dispatch({
+                    type: 'SET',
+                    payload: {
+                        direction: state.direction,
+                        x: width,
+                        y: state.y
+                    }
+                })
+            }
+
+            if (state.y > height) {
+                state.y = 0
+                store.dispatch({
+                    type: 'SET',
+                    payload: {
+                        direction: state.direction,
+                        x: state.x,
+                        y: 0
+                    }
+                })
+            } else if (state.y < 0) {
+                state.y = height
+                store.dispatch({
+                    type: 'SET',
+                    payload: {
+                        direction: state.direction,
+                        x: state.x,
+                        y: height
+                    }
+                })
+            }
+
+            draw(context, state.x, state.y, pieceWidth, pieceWidth)
 
             animationFrameId = window.requestAnimationFrame(render)
 
@@ -32,11 +96,11 @@ const GameBoard = ({ draw, x, y, width, height, pieceWidth, pieceHeight }) => {
 
         return () => {
 
-            window.cancelAnimationFrame(animationFrameId);
+            window.cancelAnimationFrame(animationFrameId)
 
         }
 
-    }, [draw, piece, width, pieceWidth, pieceHeight])
+    }, [draw, width, height, pieceWidth])
 
     return (
         <canvas
