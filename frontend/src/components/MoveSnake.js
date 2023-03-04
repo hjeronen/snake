@@ -1,23 +1,23 @@
 import { store } from './Store'
 
-const updatePosition = (x, y, direction) => {
+const updatePosition = (x, y, direction, pieceWidth) => {
     let position = { x: x, y: y }
 
     switch (direction) {
         default:
-            position.x++
+            position.x += pieceWidth
             break
         case 'UP':
-            position.y--
+            position.y -= pieceWidth
             break
         case 'DOWN':
-            position.y++
+            position.y += pieceWidth
             break
         case 'LEFT':
-            position.x--
+            position.x -= pieceWidth
             break
         case 'RIGHT':
-            position.x++
+            position.x += pieceWidth
     }
 
     return position
@@ -41,9 +41,9 @@ const checkMapBounds = (x, y, width, height) => {
     return position
 }
 
-export const moveSnake = (state, width, height) => {
+export const moveSnake = (state, width, height, pieceWidth) => {
     // move
-    const position = updatePosition(state.x, state.y, state.direction)
+    const position = updatePosition(state.x, state.y, state.direction, pieceWidth)
 
     // check map bounds and fix position
     const { x, y } = checkMapBounds(position.x, position.y, width, height)
