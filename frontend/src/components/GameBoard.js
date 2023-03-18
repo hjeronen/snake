@@ -42,12 +42,13 @@ const GameBoard = ({ draw, width, height, pieceWidth }) => {
             if (fps > speed) {
 
                 // move snake
-                [x, y] = moveSnake(snake, width, height, pieceWidth, speed)
+                [x, y] = moveSnake(snake, width, height, pieceWidth)
                 fps = 0
 
                 // check if on top of treat
                 if (x === treat.x && y === treat.y) {
                     treat = getTreat(width, height)
+                    speed -= speed*0.2
                 }
 
                 store.dispatch({
