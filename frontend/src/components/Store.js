@@ -1,7 +1,7 @@
 import { createStore } from 'redux'
 import { startX, startY } from './Configs'
 
-const positionReducer = (state = { direction: 'RIGHT', x: startX, y: startY }, action) => {
+const positionReducer = (state = { direction: 'RIGHT', x: startX, y: startY, speed: 50 }, action) => {
     switch (action.type) {
         default:
             return state

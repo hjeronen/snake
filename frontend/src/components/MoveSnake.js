@@ -41,7 +41,7 @@ const checkMapBounds = (x, y, width, height) => {
     return position
 }
 
-export const moveSnake = (state, width, height, pieceWidth) => {
+export const moveSnake = (state, width, height, pieceWidth, speed) => {
     // move
     const position = updatePosition(state.x, state.y, state.direction, pieceWidth)
 
@@ -54,7 +54,8 @@ export const moveSnake = (state, width, height, pieceWidth) => {
         payload: {
             direction: state.direction,
             x: x,
-            y: y
+            y: y,
+            speed: speed
         }
     })
 

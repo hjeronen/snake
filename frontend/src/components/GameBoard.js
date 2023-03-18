@@ -22,6 +22,8 @@ const GameBoard = ({ draw, width, height, pieceWidth }) => {
         const context = canvasRef.current.getContext('2d')
 
         let animationFrameId
+
+        // movement speed
         let fps = 0
 
         const render = () => {
@@ -29,16 +31,15 @@ const GameBoard = ({ draw, width, height, pieceWidth }) => {
             let state = store.getState()
             let x = state.x
             let y = state.y
+            let speed = state.speed
 
             fps++
 
-            if (fps > 50) {
-                [x, y] = moveSnake(state, width, height, pieceWidth)
+            if (fps > speed) {
+                [x, y] = moveSnake(state, width, height, pieceWidth, speed)
                 fps = 0
             }
 
-            // console.log(fps)
-            // console.log(x + ' ' + y)
             draw(context, x, y, pieceWidth, pieceWidth)
 
             animationFrameId = window.requestAnimationFrame(render)
