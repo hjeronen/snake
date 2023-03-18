@@ -1,5 +1,3 @@
-import { store } from './Store'
-
 const updatePosition = (x, y, direction, pieceWidth) => {
     let position = { x: x, y: y }
 
@@ -41,23 +39,12 @@ const checkMapBounds = (x, y, width, height) => {
     return position
 }
 
-export const moveSnake = (state, width, height, pieceWidth, speed) => {
+export const moveSnake = (snake, width, height, pieceWidth, speed) => {
     // move
-    const position = updatePosition(state.x, state.y, state.direction, pieceWidth)
+    const position = updatePosition(snake.x, snake.y, snake.direction, pieceWidth)
 
     // check map bounds and fix position
     const { x, y } = checkMapBounds(position.x, position.y, width, height)
-
-    // update snake position
-    store.dispatch({
-        type: 'SET',
-        payload: {
-            direction: state.direction,
-            x: x,
-            y: y,
-            speed: speed
-        }
-    })
 
     return [x, y]
 }

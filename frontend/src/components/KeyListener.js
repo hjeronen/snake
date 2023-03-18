@@ -20,9 +20,10 @@ export const keyListener = (event) => {
     }
 
     const state = store.getState()
+    let snake = state.snake
 
     // check for disallowed direction
-    if (dirs[event.key] === dirs[key[state.direction]]) {
+    if (dirs[event.key] === dirs[key[snake.direction]]) {
         return
     }
 
@@ -30,27 +31,31 @@ export const keyListener = (event) => {
         default:
             break
         case 'w':
+            snake.direction = 'UP'
             store.dispatch({
                 type: 'SET',
-                payload: { ...state, direction: 'UP' }
+                payload: { ...state, snake: snake }
             })
             break
         case 's':
+            snake.direction = 'DOWN'
             store.dispatch({
                 type: 'SET',
-                payload: { ...state, direction: 'DOWN' }
+                payload: { ...state, snake: snake }
             })
             break
         case 'a':
+            snake.direction = 'LEFT'
             store.dispatch({
                 type: 'SET',
-                payload: { ...state, direction: 'LEFT' }
+                payload: { ...state, snake: snake }
             })
             break
         case 'd':
+            snake.direction = 'RIGHT'
             store.dispatch({
                 type: 'SET',
-                payload: { ...state, direction: 'RIGHT' }
+                payload: { ...state, snake: snake }
             })
     }
 }
